@@ -5,7 +5,9 @@ import br.edu.utfpr.pb.pw44s.server.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthUserService  implements UserDetailsService {
     private final UserRepository userRepository;
 
