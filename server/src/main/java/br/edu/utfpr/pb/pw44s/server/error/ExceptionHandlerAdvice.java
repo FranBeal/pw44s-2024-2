@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+@RestControllerAdvice
 public class ExceptionHandlerAdvice {
     // Trata as exceções que irão ocorrer devido a anotação @Valid
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -31,10 +32,13 @@ public class ExceptionHandlerAdvice {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         // Retorna o objeto ApiError com os erros de validação
-        return new ApiError(HttpStatus.BAD_REQUEST.value(), "Validation error!",
-                request.getServletPath(), validationErrors);
+        return new ApiError(HttpStatus.BAD_REQUEST.
+                value(),
+                "Validation error!",
+                request.getServletPath(),
+                validationErrors);
     }
-
+/*
     // Trata exceções do tipo IllegalStateException
     @ExceptionHandler({IllegalStateException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -51,7 +55,12 @@ public class ExceptionHandlerAdvice {
     public ApiError handlerValidationException(HttpMessageNotReadableException exception,
                                                HttpServletRequest request) {
         // Retorna o objeto ApiError com a mensagem de erro
-        return new ApiError(HttpStatus.BAD_REQUEST.value(), "Validation error!",
-                request.getServletPath(), null);
+        return new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation error!",
+                request.getServletPath(),
+                null);
     }
+
+ */
 }

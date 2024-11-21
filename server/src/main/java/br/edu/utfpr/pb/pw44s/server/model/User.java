@@ -22,7 +22,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotNull(message = "O atributo usuário não pode ser nulo.")
     @Size(min = 4, max = 255)  // valida para que o atributo tenha entre 4 e 255 caracteres
     private String username;
 
@@ -38,8 +38,6 @@ public class User implements UserDetails {
 
     //Metodo que irá retornar a lista de permissões
     @Override
-    @Transient
-    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList("Role_USER");
     }

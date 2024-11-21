@@ -25,13 +25,13 @@ public class UserController {
     }
 
     @PostMapping
-    public
-    ResponseEntity<GenericResponse> createUser(@RequestBody @Valid UserDTO user) {
+    public ResponseEntity<GenericResponse> createUser(@RequestBody @Valid UserDTO user) {
+
         User userEntity = modelMapper.map(user, User.class);
         userService.save(userEntity);
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setMessage("User saved.");
         return ResponseEntity.ok(genericResponse);
-    }
 
+    }
 }
