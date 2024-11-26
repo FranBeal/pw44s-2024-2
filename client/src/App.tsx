@@ -1,10 +1,13 @@
-import { UserSignUpPage} from './pages/UserSignUpPage'
+import React from 'react';
+import './App.css'
+import { UserSignUpPage } from './pages/UserSignupPage'
 
-export function App() {
- 
+function App() {
   return (
     <div>
-			<UserSignUpPage />
-		</div>
+      <UserSignUpPage />
+    </div>
   )
 }
+
+export default App

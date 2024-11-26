@@ -1,6 +1,5 @@
 package br.edu.utfpr.pb.pw44s.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -14,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @Entity
-@Table(name="user_tb")
+@Table(name="user_tb")//, uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 @Getter @Setter
 public class User implements UserDetails {
 
