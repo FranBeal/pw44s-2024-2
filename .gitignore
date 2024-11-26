@@ -1,0 +1,15 @@
+# Geral
+.DS_Store
+node_modules/
+*.log
+.gitattributes
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Sistemas Operacionais
+Thumbs.db
