@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.css'
-import { UserSignUpPage } from './pages/UserSignupPage'
+import './App.css';
+import { BaseRoutes } from './Routes/BaseRoutes';
+
 
 function App() {
   return (
     <div>
-      <UserSignUpPage />
+      <BaseRoutes />
     </div>
   )
 }

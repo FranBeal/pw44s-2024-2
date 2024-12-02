@@ -5,18 +5,17 @@
   de texto no estado (state) da aplicação.
 */
 
+import axios, { AxiosError, AxiosResponse } from 'axios'; // Importa o Axios e seus tipos para requisições HTTP
 import './style.css'; // Importa o arquivo de estilo CSS
 import { ChangeEvent, useState } from 'react'; // Importa React e hooks necessários
 import { Link, useNavigate } from 'react-router-dom';
-import { ApiResponse, IUserSignup } from '@/commons/interfaces';
+import { ApiResponse, IUserLogin } from '@/commons/interfaces';
 import AuthService from '@/service/AuthService';
-import { AxiosResponse } from 'axios';
 
-export function UserSignUpPage() {
+export function LoginPage() {
     /* Criação de um objeto chamado `form` para armazenar o username e passord do usuário*/
     /* useState: Inicializa o estado do formulário com valores vazios para os campos displayName, username e password */
     const [form, setForm] = useState({
-        displayName: "",
         username: "",
         password: "",
     });
@@ -24,17 +23,14 @@ export function UserSignUpPage() {
     /* Criação de um objeto chamado `errors` para armazenar os erros referente a displayName, username e passord do usuário*/
     /* useState: Inicializa o estado para armazenar mensagens de erro relacionadas a cada campo */
     const [errors, setErros] = useState({
-        displayName: "",
         username: "",
         password: "",
     });
 
     const navigate = useNavigate();
-
     const [pendingApiCall, setPendingApiCall] = useState(false);
     const [apiError, setApiError] = useState("");
     const [apiSuccess, setApiSuccess] = useState("");
-
 
     /* Função chamada sempre que ocorre uma mudança em algum campo de input. 
       A cada alteração no campo de entrada, ela atualiza o estado de 'form' e limpa os erros associados ao campo */
@@ -56,33 +52,27 @@ export function UserSignUpPage() {
     };
 
     /* Função assíncrona executada quando o botão "Cadastrar" é clicado */
-    const onClickSignup = async () => {
+    const onClickLogin = async () => {
         setPendingApiCall(true);
-
         /* Monta o objeto com os valores do formulário que será enviado ao back-end */
-        const user: IUserSignup = {
-            displayName: form.displayName,
+        const user: IUserLogin = {
             username: form.username,
             password: form.password,
         };
 
-        console.log("Meu objeto: " + user.displayName + " - " + user.username + " - " + user.password);
+        console.log("Meu objeto: " + user.username + " - " + user.password);
 
-        const response: AxiosResponse<ApiResponse> = await AuthService.signup(user);
-        if (response.status === 200 || response.status === 201) {
-            setApiSuccess("Cadastro com sucesso");
+        const response: AxiosResponse<ApiResponse> = await AuthService.login(user);
+        if (response.status === 200) {
+            setApiSuccess("Autenticado com sucesso!");
             setTimeout(() => {
-                navigate("/login");
-            }, 3000)
-
+                setPendingApiCall(false);
+                navigate("/");
+            }, 3000);//3 segundos
         } else {
-            setApiError("Falha ao cadastrar o usuário!");
-            if (response.data.validationErrors) {
-                setErros(response.data.validationErrors)
-            }
             setPendingApiCall(false);
+            setApiError("Falha ao autenticar o usuário.");
         }
-
     };
 
     /* Retorna o JSX que renderiza o formulário de cadastro */
@@ -98,25 +88,7 @@ export function UserSignUpPage() {
             O valor 3 está relacionado à escala de espaçamento do Bootstrap, que vai de 0 (sem margem) a 5 (margem maior)
             fw-normal: "font-weight normal", define o peso da fonte como normal (geralmente equivalente a 400 em CSS)*/}
 
-                        <h1 className="h3 mb-3 fw-normal">User Signup Page</h1>
-                    </div>
-
-                    {/* Campo para o nome do usuário */}
-                    <div className="form-floating mb-3">
-                        {/*input utilizado para informar o nome do usuário. Nos atributos onChange e value são informados o método que trata a atualização do state e a ligação com o valor armazenado no state, respectivamente.*/}
-                        <input
-                            id="displayName"
-                            name="displayName"
-                            className={"form-control " + (errors.displayName ? "is-invalid" : "")}
-                            //is-invalid: classe usada para indicar campos de formulário com erro ou inválidos.
-                            //Aplica uma borda vermelha e exibe mensagens de erro associadas, quando combinada com uma classe como invalid-feedback
-                            type="text"
-                            placeholder="Informe o seu nome"
-                            onChange={onChange}
-                        />
-                        <label htmlFor="displayName">Informe seu nome</label>
-                        {/* Exibe mensagem de erro, caso exista */}
-                        {errors.displayName && (<div className="invalid-feedback">{errors.displayName}</div>)}
+                        <h1 className="h3 mb-3 fw-normal">Login Page</h1>
                     </div>
 
                     {/* Campo para o username */}
@@ -152,17 +124,20 @@ export function UserSignUpPage() {
                             <div className="alert alert-danger">{apiError}</div>
                         </div>
                     )}
+
                     {apiSuccess && (
                         <div className="col-12 mb-3">
                             <div className="alert alert-success">{apiSuccess}</div>
                         </div>
                     )}
-
+                    {/* Botão 
+                    
                     {/* Botão para enviar o formulário */}
                     <div className="text-center">
-                        <button type="button"
+                        <button
+                            type="button"
                             className="w-100 btn btn-lg btn-primary mb-3"
-                            onClick={onClickSignup}
+                            onClick={onClickLogin}
                             disabled={pendingApiCall}>
                             {pendingApiCall && (
                                 <div
@@ -173,15 +148,15 @@ export function UserSignUpPage() {
                                     <span className="visually-hidden">Aguarde</span>
                                 </div>
                             )}&nbsp;
-                            Cadastrar
+                            Login
                         </button>
                     </div>
                 </form>
                 <div className="text-center">
                     {/*Link é do react-router-dom, to= é a url*/}
-                    <Link to="/login">Ir para a tela de login</Link>
+                    <Link to="/signup">Deseja cadastrar-se?</Link>
                 </div>
-            </main >
+            </main>
         </>
     );
 }
